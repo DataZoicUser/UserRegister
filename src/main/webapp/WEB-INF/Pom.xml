@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>javaee-webapp</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <name>Java EE Webapp</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
+    <distributionManagement>
+        <repository>
+            <id>local_repo</id>
+            <url>C:\Users\varadharajan\.m2\repository</url>
+        </repository>
+    </distributionManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <version>12.6.1.jre11</version>
+        </dependency>
+        
+        <dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.33</version>
+</dependency>
+        
+        <!-- Added dependencies -->
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>9.0.63</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <version>9.0.63</version>
+            
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>javaee-webapp</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.2.3</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+
+            <!-- Added plugin -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>tomcat-maven-plugin</artifactId>
+                <version>1.8.5</version>
+                <configuration>
+                    <server>local_tomcat</server>
+                    <url>http://localhost:8084/manager/text</url>
+                </configuration>
+            </plugin>
+            <plugin>
+            <dependencies>
+            <dependency>
+    <groupId>org.apache.maven.wagon</groupId>
+    <artifactId>wagon</artifactId>
+    <version>3.5.3</version>
+    </dependency>
+    </dependencies>
+            <executions>
+            <execution>
+            <id>upload-war</id>
+            <phase>install</phase>
+            <goals>
+            <goal>upload</goal>
+            </goals>
+            <configuration>
+            <serverId>my-server</serverId>
+            <fromFile>${project.build.directory}/${project.build.finalName}.war</fromFile>
+            <toFile>my-module/target/my-module.war</toFile>
+            </configuration>
+            </execution>
+            </executions>
+            <configuration>
+            <wagonProvider>httpclient</wagonProvider>
+            <server>
+            <id>my-server</id>
+            <username>my-username</username>
+            <password>my-password</password>
+            <url>http://my-server.com/path/to/deploy/directory</url>
+            </server>
+            </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
