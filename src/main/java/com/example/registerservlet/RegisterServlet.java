@@ -37,6 +37,7 @@ public class RegisterServlet extends HttpServlet {
 	private Object connection;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		PrintWriter out = response.getWriter();
 		try {
 			try {
 				Class.forName("com.mysql.cj.jdbc.Driver");
@@ -49,6 +50,16 @@ public class RegisterServlet extends HttpServlet {
 			String sql = "SELECT * FROM users";
 			ResultSet resultSet = statement.executeQuery(sql);
 			request.setAttribute("resultSet", resultSet);
+			 out.println("<table border='1'>");
+	            out.println("<tr><th>ID</th><th>Username</th><th>Email</th></tr>");
+	            while (resultSet.next()) {
+	                out.println("<tr>");
+	                out.println("<td>" + resultSet.getString("id") + "</td>");
+	                out.println("<td>" + resultSet.getString("username") + "</td>");
+	                out.println("<td>" + resultSet.getString("email") + "</td>");
+	                out.println("</tr>");
+	            }
+	            out.println("</table>");
 			resultSet.close();
 			statement.close();
 			connection.close();
